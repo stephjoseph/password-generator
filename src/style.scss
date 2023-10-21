@@ -1,0 +1,29 @@
+// fonts
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
+
+// tailwind directives
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #24232c;
+  color: #e6e5ea;
+  min-width: 360px;
+}
+
+.font {
+  &-heading {
+    &-l {
+      @apply font-['JetBrains_Mono'] font-bold text-[2rem] leading-[2.688rem] tracking-normal;
+    }
+
+    &-m {
+      @apply font-['JetBrains_Mono'] font-bold text-[1.5rem] leading-[1.938rem] tracking-normal;
+    }
+  }
+
+  &-body {
+    @apply font-['JetBrains_Mono'] font-bold text-[1.125rem] leading-[1.438rem] tracking-normal;
+  }
+}
