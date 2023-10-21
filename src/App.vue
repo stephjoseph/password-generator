@@ -1,5 +1,8 @@
 <template>
-  <div class="font-heading-l">Password Generator</div>
+  <div>
+    <h1 class="font-heading-l">Password Generator</h1>
+    <v-slider></v-slider>
+  </div>
 </template>
 
 <script>
