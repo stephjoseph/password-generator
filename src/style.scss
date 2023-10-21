@@ -11,7 +11,7 @@ body {
 }
 
 #app {
-  @apply relative mx-auto grid h-screen w-full max-w-[1920px] min-h-[667px] place-items-center;
+  @apply relative mx-auto grid h-screen w-full max-w-[1920px] min-h-[667px] place-items-center xl:min-h-[768px];
 }
 
 .font {
