@@ -7,9 +7,11 @@
 @tailwind utilities;
 
 body {
-  background: #24232c;
-  color: #e6e5ea;
-  min-width: 360px;
+  @apply bg-[#08070B] font-['JetBrains_Mono'] text-almost-white min-w-['360px'];
+}
+
+#app {
+  @apply relative mx-auto grid h-screen w-full max-w-[1920px] min-h-[667px] place-items-center;
 }
 
 .font {
