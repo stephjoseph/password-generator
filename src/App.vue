@@ -8,12 +8,15 @@
     <div class="flex flex-col w-full gap-4">
       <div class="relative">
         <input
+          v-model="state.password.value"
           type="text"
           class="w-full h-16 bg-dark-grey font-['JetBrains_Mono'] font-bold text-[1.5rem] leading-[1.938rem] tracking-normal p-4 focus:outline-none caret-neon-green pr-[3.25rem]"
         />
         <button
+          v-if="!copied"
           type="button"
           class="absolute w-8 h-8 flex items-center justify-center top-4 right-[10px] z-10"
+          @click="copyPassword"
         >
           <div class="w-[1.313rem] h-[1.5rem] group">
             <svg
@@ -33,6 +36,24 @@
             </svg>
           </div>
         </button>
+        <div
+          v-else
+          class="absolute w-8 h-8 flex items-center justify-center top-4 right-[10px] z-10"
+        >
+          <svg
+            width="28"
+            height="20"
+            viewBox="0 0 15 13"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2 6.60659L5.39341 10L13.3934 2"
+              stroke="#A4FFAF"
+              stroke-width="3"
+            />
+          </svg>
+        </div>
       </div>
 
       <div class="w-full flex flex-col gap-8 bg-dark-grey p-4">
@@ -42,10 +63,12 @@
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-almost-white"
               >Character Length</label
             >
-            <span class="font-heading-l text-neon-green">{{ slider }}</span>
+            <span class="font-heading-l text-neon-green">{{
+              passwordLength
+            }}</span>
           </div>
           <v-slider
-            v-model="slider"
+            v-model="passwordLength"
             color="#A4FFAF"
             track-color="#18171F"
             thumb-color="#E6E5EA"
@@ -58,7 +81,12 @@
         </div>
         <div class="flex flex-col gap-4">
           <div>
-            <input type="checkbox" checked class="custom-checkbox" />
+            <input
+              v-model="state.includeUppercase.value"
+              id="uppercase"
+              type="checkbox"
+              class="custom-checkbox"
+            />
             <label
               for="uppercase"
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-almost-white pl-10"
@@ -66,7 +94,12 @@
             >
           </div>
           <div>
-            <input type="checkbox" class="custom-checkbox" />
+            <input
+              v-model="state.includeLowercase.value"
+              id="lowercase"
+              type="checkbox"
+              class="custom-checkbox"
+            />
             <label
               for="lowercase"
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-almost-white pl-10"
@@ -74,7 +107,12 @@
             >
           </div>
           <div>
-            <input type="checkbox" class="custom-checkbox" />
+            <input
+              v-model="state.includeNumbers.value"
+              id="numbers"
+              type="checkbox"
+              class="custom-checkbox"
+            />
             <label
               for="numbers"
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-almost-white pl-10"
@@ -82,7 +120,12 @@
             >
           </div>
           <div>
-            <input type="checkbox" class="custom-checkbox" />
+            <input
+              v-model="state.includeSymbols.value"
+              id="symbols"
+              type="checkbox"
+              class="custom-checkbox"
+            />
             <label
               for="symbols"
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-almost-white pl-10"
@@ -100,25 +143,60 @@
               Strength
             </h2>
             <div class="flex items-center gap-4">
-              <span class="font-body text-almost-white uppercase">Medium</span>
+              <span class="font-body text-almost-white uppercase">{{
+                passwordStrength
+              }}</span>
               <div class="flex gap-2 w-16 h-[1.75rem]">
                 <div
-                  class="w-[0.625rem] h-[1.75rem] ring-2 ring-almost-white ring-inset"
+                  class="w-[0.625rem] h-[1.75rem] border-2 border-solid transition-colors duration-500"
+                  :class="[
+                    passwordStrength === 'Too Weak'
+                      ? 'border-red bg-red'
+                      : passwordStrength === 'Weak'
+                      ? 'border-orange bg-orange'
+                      : passwordStrength === 'Medium'
+                      ? 'border-yellow bg-yellow'
+                      : passwordStrength === 'Strong'
+                      ? 'border-neon-green bg-neon-green'
+                      : 'border-almost-white',
+                  ]"
                 ></div>
                 <div
-                  class="w-[0.625rem] h-[1.75rem] ring-2 ring-almost-white ring-inset"
+                  class="w-[0.625rem] h-[1.75rem] border-2 border-solid transition-colors duration-500"
+                  :class="[
+                    passwordStrength === 'Weak'
+                      ? 'border-orange bg-orange'
+                      : passwordStrength === 'Medium'
+                      ? 'border-yellow bg-yellow'
+                      : passwordStrength === 'Strong'
+                      ? 'border-neon-green bg-neon-green'
+                      : 'border-almost-white',
+                  ]"
                 ></div>
                 <div
-                  class="w-[0.625rem] h-[1.75rem] ring-2 ring-almost-white ring-inset"
+                  class="w-[0.625rem] h-[1.75rem] border-2 border-solid transition-colors duration-500"
+                  :class="[
+                    passwordStrength === 'Medium'
+                      ? 'border-yellow bg-yellow'
+                      : passwordStrength === 'Strong'
+                      ? 'border-neon-green bg-neon-green'
+                      : 'border-almost-white',
+                  ]"
                 ></div>
                 <div
-                  class="w-[0.625rem] h-[1.75rem] ring-2 ring-almost-white ring-inset"
+                  class="w-[0.625rem] h-[1.75rem] border-2 border-solid transition-colors duration-500"
+                  :class="[
+                    passwordStrength === 'Strong'
+                      ? 'border-neon-green bg-neon-green'
+                      : 'border-almost-white',
+                  ]"
                 ></div>
               </div>
             </div>
           </div>
           <button
             class="w-full h-14 bg-neon-green flex items-center justify-center gap-4 group hover:bg-transparent hover:border-2 hover:border-neon-green hover:border-solid transition-colors duration-300"
+            @click="generatePassword"
           >
             <span
               class="font-['JetBrains_Mono'] font-bold text-base leading-[1.313rem] tracking-normal text-dark-grey uppercase group-hover:text-neon-green group-active:text-neon-green transition-colors duration-300"
@@ -147,10 +225,98 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
 export default {
-  data() {
+  setup() {
+    const passwordLength = ref(10);
+    const state = {
+      includeUppercase: ref(true),
+      includeLowercase: ref(true),
+      includeNumbers: ref(true),
+      includeSymbols: ref(false),
+      password: ref(''),
+    };
+    const copied = ref(false);
+
+    const containsCharacterSets = (state) => {
+      return (
+        state.includeUppercase.value ||
+        state.includeLowercase.value ||
+        state.includeNumbers.value ||
+        state.includeSymbols.value
+      );
+    };
+
+    const countCharacterSets = (state) => {
+      return [
+        state.includeUppercase.value,
+        state.includeLowercase.value,
+        state.includeNumbers.value,
+        state.includeSymbols.value,
+      ].filter((value) => value).length;
+    };
+
+    const passwordStrength = computed(() => {
+      if (passwordLength.value < 4 || !containsCharacterSets(state)) {
+        return 'Too Weak';
+      } else if (passwordLength.value < 8 || countCharacterSets(state) < 3) {
+        return 'Weak';
+      } else if (passwordLength.value < 12 || countCharacterSets(state) < 4) {
+        return 'Medium';
+      } else {
+        return 'Strong';
+      }
+    });
+
+    const generateCharacterSets = (state) => {
+      const sets = [
+        state.includeUppercase.value ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '',
+        state.includeLowercase.value ? 'abcdefghijklmnopqrstuvwxyz' : '',
+        state.includeNumbers.value ? '0123456789' : '',
+        state.includeSymbols.value ? '!@#$%^&*()_+[]{}|;:,.<>?/' : '',
+      ];
+      return sets.join('');
+    };
+
+    const generatePassword = () => {
+      const characters = generateCharacterSets(state);
+      let password = '';
+      if (characters) {
+        for (let i = 0; i < passwordLength.value; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          password += characters[randomIndex];
+        }
+        state.password.value = password;
+      } else {
+        password = '';
+        state.password.value = password;
+      }
+    };
+
+    const copyPassword = async () => {
+      const passwordToCopy = state.password.value;
+      try {
+        await navigator.clipboard.writeText(passwordToCopy);
+        copied.value = true;
+
+        setTimeout(() => {
+          copied.value = false;
+        }, 3000); // 3000 milliseconds (3 seconds)
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    };
+
+    // generate password on load
+    generatePassword();
+
     return {
-      slider: 10,
+      state,
+      passwordLength,
+      passwordStrength,
+      generatePassword,
+      copied,
+      copyPassword,
     };
   },
 };
@@ -189,12 +355,16 @@ export default {
   top: 0;
   width: 20px;
   height: 20px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  border: 2px solid #e6e5ea;
+  background-color: transparent;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
 }
 
 .custom-checkbox:checked + label::before {
   background: url('./assets/check.svg') #a4ffaf center/contain no-repeat;
-  border: none;
+  border-color: #a4ffaf;
 }
 </style>
