@@ -10,7 +10,7 @@
     <div class="flex flex-col w-full gap-4 md:gap-6">
       <div class="relative">
         <div
-          class="w-full h-16 bg-dark-grey font-['JetBrains_Mono'] font-bold text-[1.5rem] leading-[1.938rem] tracking-normal p-4 pr-[3.25rem] md:h-20 md:pl-6 md:py-5 md:text-[2rem] md:leading-[2.688rem] md:pr-[7.5rem]"
+          class="w-full h-16 bg-dark-grey font-['JetBrains_Mono'] font-bold text-[1.5rem] leading-[1.938rem] tracking-normal p-4 pr-9 md:h-20 md:pl-6 md:py-5 md:text-[2rem] md:leading-[2.688rem] md:pr-[7.5rem]"
         >
           {{ state.password.value }}
         </div>
@@ -18,7 +18,7 @@
           <button
             v-if="!copied"
             type="button"
-            class="absolute w-8 h-8 flex items-center justify-center top-4 right-[10px] z-10 md:right-[18px] md:top-5 md:h-10 md:w-10"
+            class="absolute w-8 h-8 flex items-center justify-center top-4 right-1 z-10 md:right-[18px] md:top-5 md:h-10 md:w-10"
             @click="copyPassword"
           >
             <div class="w-[1.313rem] h-[1.5rem] group md:w-6 md:h-8">
@@ -41,7 +41,7 @@
           </button>
           <div
             v-else
-            class="absolute w-8 h-8 flex items-center gap-2 justify-center top-4 right-[10px] z-10 md:right-[18px] md:top-5 md:h-10 md:w-[102px]"
+            class="absolute w-8 h-8 flex items-center gap-2 justify-center top-4 right-1 z-10 md:right-[18px] md:top-5 md:h-10 md:w-[102px]"
           >
             <span class="font-body uppercase text-neon-green hidden md:block"
               >copied</span
@@ -202,7 +202,7 @@
             </div>
           </div>
           <button
-            class="w-full h-14 bg-neon-green flex items-center justify-center gap-4 group hover:bg-transparent hover:border-2 hover:border-neon-green hover:border-solid transition-colors duration-300 md:h-16 md:gap-6"
+            class="w-full h-14 bg-neon-green flex items-center justify-center gap-4 group hover:bg-transparent active:bg-transparent hover:border-2 hover:border-neon-green hover:border-solid active:border-2 active:border-neon-green active:border-solid transition-colors duration-300 md:h-16 md:gap-6"
             @click="generatePassword"
           >
             <span
